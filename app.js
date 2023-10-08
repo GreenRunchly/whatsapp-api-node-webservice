@@ -20,34 +20,32 @@ wbm.start().then(async () => {
 	return;
 });
 
+// let kontak = [
+// 	{phone: "6281212582659", otp: "1821" },
+// 	{phone: "6281283171617", otp: "1882" },
+// 	{phone: "62811873100", otp: "8822" },
+// 	{phone: "6281221925082", otp: "7382" }
+// ];
+// let orang = {phone: "6281212582659", otp: "1882" };
+// kontak.push(orang);
+
 // Mengambil data Countdown
 app.get('/send', (req, res) => {
-	let kontak = [
-		{phone: "6281212582659", otp: "1821" },
-		{phone: "6281283171617", otp: "1882" },
-		{phone: "62811873100", otp: "8822" },
-		{phone: "6281221925082", otp: "7382" }
-	];
-	
-	// let orang = {phone: "6281212582659", otp: "1882" };
-	// kontak.push(orang);
-	
-	let pesan = `Testing pesan bulk chat personal untuk kebutuhan sendiri`;
 
-	console.log(pesan);
-	wbm.send(kontak, pesan).then(async () => {
+	let {destinasi, pesan} = req;
+
+	wbm.send(destinasi, pesan).then(async () => {
 		console.log('Done');
 		res.json({
 			code : "ok",
-			msg : "Pesan terkirim!"
+			msg : "Mengirim berhasil!"
 		})
 		return;
 	}).catch( (err) => {
-		console.log(err);
-		console.log('Failed Sending OTP...');
+		console.log(`Failed Sending... (${err})`);
 		res.json({
 			code : "error",
-			msg : "Pesan gagal!"
+			msg : "Mengirim gagal!"
 		})
 		return;
 	});
@@ -58,7 +56,7 @@ app.get('/send', (req, res) => {
 app.get('/*', (req, res) => {
 	res.json({
 		code : "error",
-		msg : "URL invalid"
+		msg : "API Invalid"
 	})
 });
 
