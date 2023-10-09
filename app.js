@@ -20,32 +20,34 @@ wbm.start().then(async () => {
 	return;
 });
 
-// let kontak = [
-// 	{phone: "6281212582659", otp: "1821" },
-// 	{phone: "6281283171617", otp: "1882" },
-// 	{phone: "62811873100", otp: "8822" },
-// 	{phone: "6281221925082", otp: "7382" }
-// ];
-// let orang = {phone: "6281212582659", otp: "1882" };
-// kontak.push(orang);
+// To make sure terminal doesn't closed
+var heartbeat = setInterval(function(str1, str2, str3) {
+	console.log(str1 + str2 + str3);
+}, 1000, "===", "Alive", "===");	
 
 // Mengambil data Countdown
 app.get('/send', (req, res) => {
 
-	let {destinasi, pesan} = req;
+	// Mengambil data query
+	let {destinasi, pesan} = req.query;
 
-	wbm.send(destinasi, pesan).then(async () => {
-		console.log('Done');
+	// Menyiapkan antrian
+	let kontak = [
+		{phone:destinasi, message:pesan}
+	];
+
+	wbm.send(kontak, `{{message}}`).then(async () => {
+		console.log(`Pesan nomor ${destinasi} terkirim`);
 		res.json({
 			code : "ok",
-			msg : "Mengirim berhasil!"
+			msg : `Mengirim ${destinasi} berhasil!`
 		})
 		return;
 	}).catch( (err) => {
-		console.log(`Failed Sending... (${err})`);
+		console.log(`Pesan nomor ${destinasi} tidak terkirim! (${err})`);
 		res.json({
 			code : "error",
-			msg : "Mengirim gagal!"
+			msg : `Mengirim ${destinasi} gagal!`
 		})
 		return;
 	});
