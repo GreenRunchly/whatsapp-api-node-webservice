@@ -23,7 +23,7 @@ wbm.start().then(async () => {
 // To make sure terminal doesn't closed
 var heartbeat = setInterval(function(str1, str2, str3) {
 	console.log(str1 + str2 + str3);
-}, 1000, "===", "Alive", "===");	
+}, 30000, "===", "Alive", "===");	
 
 // Mengambil data Countdown
 app.get('/send', (req, res) => {
