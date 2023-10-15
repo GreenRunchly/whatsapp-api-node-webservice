@@ -22,7 +22,7 @@ const SELECTORS = {
 /**
  * Initialize browser, page and setup page desktop mode
  */
-async function start({ showBrowser = true, qrCodeData = false, session = true } = {}) {
+async function start({ showBrowser = false, qrCodeData = false, session = true } = {}) {
     if (!session) {
         deleteSession(tmpPath);
     }
@@ -173,7 +173,7 @@ async function sendTo(phoneOrContact, message) {
         await page.click(`.targetklik`);
         //await page.goto(`https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`);
         await page.waitForSelector(SELECTORS.LOADING, { hidden: true, timeout: 10000 });
-        await page.waitForSelector(SELECTORS.SEND_BUTTON, { timeout: 5000 });
+        await page.waitForSelector(SELECTORS.SEND_BUTTON, { timeout: 2000 });
         await page.keyboard.press("Enter");
         await page.waitFor(3000);
         process.stdout.clearLine();
