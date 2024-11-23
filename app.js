@@ -30,6 +30,8 @@ function mdvldResult(req, res, next) {
 
 // Menggunakan CORS agar api dapat dipakai oleh siapa saja (tanpa perlu origin server)
 app.use(cors());
+app.use(express.json()); // Untuk mengurai JSON
+app.use(express.urlencoded({ extended: true })); // Untuk mengurai URL-encoded
 
 // Koneksi mysql
 const mysql = require('mysql2');
@@ -108,12 +110,12 @@ let heartBeat = setInterval(function(str1, str2, str3) {
 
 		});
 	}
-}, 60000, "----", `Mengecek Pesan Terbaru`, "----");	
+}, 30000, "----", `Mengecek Pesan Terbaru`, "----");	
 
 // Mengambil data Countdown
-app.get('/send', [
-    mdvld.query('destinasi').not().isEmpty().withMessage('Masukan nomor telepon!').trim().escape(),
-	mdvld.query('pesan').not().isEmpty().withMessage('Harap isi pesan!').trim().escape()
+app.post('/send', [
+    mdvld.body('destinasi').not().isEmpty().withMessage('Masukan nomor telepon!').trim().escape(),
+	mdvld.body('pesan').not().isEmpty().withMessage('Harap isi pesan!').trim().escape()
 ], (req, res) => {
 
 	// Cek Error pada validasi input
@@ -122,7 +124,7 @@ app.get('/send', [
     }
 
 	// Mengambil data dari query
-	let {destinasi, pesan} = req.query;
+	let {destinasi, pesan} = req.body;
 
 	// Convert ke angka saja
 	destinasi = destinasi.replace(/\D+/g, '');
